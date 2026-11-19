@@ -1,0 +1,25 @@
+{
+  "case_id": "example-clean",
+  "inputs": ["data.csv"],
+  "dictionary": {
+    "conc": {"type": "numeric", "missing": "flag", "outlier": "flag"}
+  },
+  "rules": {
+    "key_columns": ["sample_id"],
+    "normalize_columns": true,
+    "missing": "flag",
+    "outlier": "flag"
+  },
+  "units": {
+    "conc": {
+      "unit_column": "unit",
+      "to": "ug/L",
+      "factors": {"mg/L": 1000, "ug/mL": 1}
+    }
+  },
+  "workorder": [
+    "deduplicate by sample_id",
+    "convert conc to ug/L using the row's unit",
+    "flag outliers without deleting rows"
+  ]
+}
