@@ -5,6 +5,8 @@ description: "Clean research data reproducibly: read tables with encoding/delimi
 
 # dataclean — Reproducible Research-data Cleaning with Evidence
 
+> **脚本路径**：本技能安装于 `/skills/weekly-skill/`，脚本绝对路径为 `/skills/weekly-skill/scripts/`（工作目录是 `/app/work`，不要用相对路径）。
+
 Turn a dirty instrument/export table into one that can support downstream statistics — and prove every change. The failure mode this skill exists to prevent: a generic script that ignores the data dictionary, fills missing values with column means, confuses "not detected" with a measured zero, keeps near-duplicates, loses precision in unit conversion, overwrites the original file, and writes a quality report whose numbers do not match the output.
 
 **Method in one line:** parse with encoding/delimiter repair → apply field-level rules from the dictionary/workorder → copy (never overwrite the source) → write the cleaned table + a per-decision log + a quality report + a rules snapshot.
@@ -20,7 +22,7 @@ Turn a dirty instrument/export table into one that can support downstream statis
 ### Phase 1 — Clean
 
 ```bash
-python3 scripts/clean.py --case /input/case.json --work /app/work
+python3 /skills/weekly-skill/scripts/clean.py --case /input/case.json --work /app/work
 ```
 
 What it does, in order:
@@ -40,7 +42,7 @@ What it does, in order:
 ### Phase 2 — Verify the report matches the output
 
 ```bash
-python3 scripts/check_quality.py --case /input/case.json --work /app/work
+python3 /skills/weekly-skill/scripts/check_quality.py --case /input/case.json --work /app/work
 ```
 
 Independently recomputes per-field missing counts and row counts from the cleaned table and compares them to `quality_report.json`; exits non-zero on any mismatch. **A quality report whose numbers disagree with the output is a bug, not a finding.**
@@ -77,7 +79,7 @@ cp /app/work/cleaned_* /app/work/cleaning_log.json /app/work/quality_report.json
 ## Self-check
 
 ```bash
-python3 scripts/check_quality.py --case /input/case.json --work /app/work
+python3 /skills/weekly-skill/scripts/check_quality.py --case /input/case.json --work /app/work
 python3 -c "import json;r=json.load(open('/app/work/result.json'));print(r['case_id'], r['status'], r['counts'])"
 ```
 
